@@ -1,20 +1,18 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-800 to-black text-white"
+    class="flex flex-col items-center justify-center min-h-screen bg-[#0e1012] text-white"
+    @click="errorMessage = ''"
   >
-    <div class="w-full max-w-md p-8 bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl">
-      <div class="text-center mb-8">
-        <h2
-          class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600"
-        >
-          Welcome Back!
-        </h2>
+    <div class="w-full max-w-md p-8 shadow-2xl my-10 border border-white/5">
+      <div class="text-center mb-6">
+        <AudioWaveform class="w-10 h-10 mx-auto mb-2 text-pink-500" />
+        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-white">Welcome Back!</h2>
         <p class="text-gray-400 text-sm mt-2">Login to continue your vibe with MelodyMely</p>
       </div>
 
-      <form class="space-y-5">
+      <form class="space-y-4" @submit.prevent="handleLogin">
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">Email or Username</label>
+          <label class="block text-sm font-medium text-white mb-1">Email Address</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <svg
@@ -28,11 +26,12 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
             </span>
             <input
+              v-model="form.email"
               type="text"
               class="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition"
               placeholder="name@example.com"
@@ -41,7 +40,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+          <label class="block text-sm font-medium text-white mb-1">Password</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <svg
@@ -60,16 +59,18 @@
               </svg>
             </span>
             <input
-              type="password"
+              v-model="form.password"
+              :type="showPassword ? 'text' : 'password'"
               class="w-full pl-10 pr-12 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition"
-              placeholder="••••••••"
+              placeholder="Enter your password"
             />
             <button
               type="button"
+              @click="showPassword = !showPassword"
               class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                v-if="!showPassword"
                 class="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -88,39 +89,84 @@
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
+              <svg v-else class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                />
+              </svg>
             </button>
           </div>
         </div>
 
         <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center text-gray-300 cursor-pointer hover:text-white">
+          <label
+            class="flex items-center text-gray-400 cursor-pointer hover:text-white select-none"
+          >
             <input
+              v-model="form.rememberMe"
               type="checkbox"
-              class="rounded bg-gray-700 border-gray-600 text-pink-500 focus:ring-pink-500 mr-2"
+              class="w-4 h-4 border border-gray-600 rounded bg-gray-700 focus:ring-3 focus:ring-pink-500 text-pink-500 cursor-pointer"
             />
-            Remember me
+            <span class="ml-2 font-medium">Remember me</span>
           </label>
-          <a href="#" class="text-pink-400 hover:text-pink-300 transition hover:underline"
+          <a
+            href="#"
+            class="text-pink-400 hover:text-pink-500 transition hover:underline font-medium"
             >Forgot Password?</a
           >
         </div>
 
-        <button
-          class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-lg font-semibold text-white shadow-lg hover:shadow-pink-500/30 transform hover:-translate-y-0.5 transition"
+        <div
+          v-if="errorMessage"
+          class="p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-400 text-sm text-center font-medium transition-all duration-300"
         >
-          Sign In
+          {{ errorMessage }}
+        </div>
+
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="w-full py-3 mt-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-lg font-bold text-white shadow-lg hover:shadow-pink-500/30 transform hover:-translate-y-0.5 transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+        >
+          <span v-if="isLoading" class="flex items-center">
+            <svg
+              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Processing...
+          </span>
+          <span v-else>Log In</span>
         </button>
 
         <div class="relative flex py-2 items-center">
           <div class="flex-grow border-t border-gray-600"></div>
-          <span class="flex-shrink-0 mx-4 text-gray-400 text-sm">Or continue with</span>
+          <span class="flex-shrink-0 mx-4 text-gray-400 text-sm">Or log in with</span>
           <div class="flex-grow border-t border-gray-600"></div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <button
             type="button"
-            class="flex items-center justify-center px-4 py-2 bg-black/30 border border-gray-600 rounded-lg hover:bg-white/10 transition text-gray-300"
+            class="flex items-center justify-center px-4 py-3 bg-black/30 border border-gray-600 rounded-lg hover:bg-white/10 transition text-gray-300 font-medium"
           >
             <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -131,7 +177,7 @@
           </button>
           <button
             type="button"
-            class="flex items-center justify-center px-4 py-2 bg-black/30 border border-gray-600 rounded-lg hover:bg-white/10 transition text-gray-300"
+            class="flex items-center justify-center px-4 py-3 bg-black/30 border border-gray-600 rounded-lg hover:bg-white/10 transition text-gray-300 font-medium"
           >
             <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
               <path
@@ -147,7 +193,7 @@
         Don't have an account?
         <RouterLink
           to="/signup"
-          class="font-medium text-pink-400 hover:text-pink-500 transition hover:underline"
+          class="font-bold text-pink-400 hover:text-pink-500 transition hover:underline"
           >Sign Up</RouterLink
         >
       </p>
@@ -156,16 +202,85 @@
 </template>
 
 <script setup lang="ts">
-// Không có logic JS/TS
+import { AudioWaveform } from 'lucide-vue-next'
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+// 1. IMPORT SUPABASE CLIENT (Đảm bảo đường dẫn đúng với project của bạn)
+import { supabase } from '@/supabase'
+
+const router = useRouter()
+const isLoading = ref(false)
+const errorMessage = ref('')
+const showPassword = ref(false)
+
+const form = reactive({
+  email: '',
+  password: '',
+  rememberMe: false,
+})
+
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+const handleLogin = async () => {
+  errorMessage.value = ''
+
+  // Validation cơ bản
+  if (!form.email) {
+    errorMessage.value = 'Email is required!'
+    return
+  }
+  if (!isValidEmail(form.email)) {
+    errorMessage.value = 'Invalid email format!'
+    return
+  }
+  if (!form.password) {
+    errorMessage.value = 'Password is required!'
+    return
+  }
+
+  try {
+    isLoading.value = true
+
+    // 2. GỌI API ĐĂNG NHẬP CỦA SUPABASE
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    })
+
+    if (error) throw error
+
+    // 3. XỬ LÝ KHI ĐĂNG NHẬP THÀNH CÔNG
+    if (data.session) {
+      // Lưu token để Router Guard (trong router/index.js) kiểm tra
+      localStorage.setItem('access_token', data.session.access_token)
+
+      // Chuyển hướng
+      router.push({ name: 'dashboard' })
+    }
+  } catch (error: any) {
+    // 4. HIỂN THỊ LỖI TỪ SUPABASE (Sai pass, chưa confirm mail...)
+    console.error(error)
+    if (error.message === 'Invalid login credentials') {
+      errorMessage.value = 'Email hoặc mật khẩu không chính xác.'
+    } else if (error.message.includes('Email not confirmed')) {
+      errorMessage.value = 'Vui lòng xác thực email trước khi đăng nhập.'
+    } else {
+      errorMessage.value = error.message
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <style scoped>
-/* Giữ background của input trong suốt khi browser tự điền (Autofill) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #2e1065 inset !important;
+  -webkit-box-shadow: 0 0 0 30px #0e1012 inset !important;
   -webkit-text-fill-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }

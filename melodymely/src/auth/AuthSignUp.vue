@@ -1,22 +1,17 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-800 to-black text-white"
-  >
-    <div
-      class="w-full max-w-md p-8 bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl my-10 border border-white/5"
-    >
+  <div class="flex flex-col items-center justify-center min-h-screen bg-[#0e1012] text-white">
+    <div class="w-full max-w-md p-8 shadow-2xl my-10 border border-white/5">
       <div class="text-center mb-6">
-        <h2
-          class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600"
-        >
-          Create Account
+        <AudioWaveform class="w-10 h-10 mx-auto mb-2 text-pink-500" />
+        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-white">
+          Sign up to start listening
         </h2>
         <p class="text-gray-400 text-sm mt-2">Join MelodyMely and feel the beat</p>
       </div>
 
       <form class="space-y-4" @submit.prevent="handleSignUp">
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+          <label class="block text-sm font-medium text-white mb-1">Full name</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <svg
@@ -44,7 +39,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
+          <label class="block text-sm font-medium text-white mb-1">Email Address</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <svg
@@ -72,7 +67,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+          <label class="block text-sm font-medium text-white mb-1">Password</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <svg
@@ -134,7 +129,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1">Confirm Password</label>
+          <label class="block text-sm font-medium text-white mb-1">Confirm Password</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
               <svg
@@ -170,10 +165,7 @@
               class="w-4 h-4 border border-gray-600 rounded bg-gray-700 focus:ring-3 focus:ring-pink-500 text-pink-500 cursor-pointer"
             />
           </div>
-          <label
-            for="terms"
-            class="ml-2 text-sm font-medium text-gray-300 cursor-pointer select-none"
-          >
+          <label for="terms" class="ml-2 text-sm font-medium text-white cursor-pointer select-none">
             I agree to the
             <a href="#" class="text-pink-400 hover:underline">Terms of Service</a> and
             <a href="#" class="text-pink-400 hover:underline">Privacy Policy</a>
@@ -254,7 +246,7 @@
         Already have an account?
         <RouterLink
           to="/login"
-          class="font-medium text-pink-400 hover:text-pink-500 transition hover:underline"
+          class="text-pink-400 font-bold hover:text-pink-500 transition hover:underline decoration-none"
           >Log In</RouterLink
         >
       </p>
@@ -266,6 +258,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '@/supabase'
+import { AudioWaveform } from 'lucide-vue-next'
 
 const router = useRouter()
 const isLoading = ref(false)

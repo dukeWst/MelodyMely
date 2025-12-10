@@ -1,9 +1,23 @@
 <script setup lang="ts">
-import { Flame, Guitar, Headphones, Music2 } from 'lucide-vue-next'
+import { AudioWaveform, Flame, Guitar, Headphones, Music2 } from 'lucide-vue-next'
 import HomeElementList from './HomeElementList.vue'
 </script>
 
 <template>
+  <header class="w-full py-4 bg-purple-800 backdrop-blur-lg text-white">
+    <div class="container mx-auto px-6 flex justify-between items-center">
+      <RouterLink to="/" class="flex items-center font-bold tracking-wide m-4">
+        <AudioWaveform class="w-10 h-10 mr-2 text-pink-500" />
+        <p class="text-pink-500 text-2xl">MelodyMely</p>
+      </RouterLink>
+      <nav class="flex gap-6 items-center justify-center">
+        <RouterLink to="/signup" class="hover:text-pink-300 transition">Sign Up</RouterLink>
+        <RouterLink to="/login" class="hover:text-pink-300 transition bg-black rounded-xl px-6 py-2"
+          >Log in</RouterLink
+        >
+      </nav>
+    </div>
+  </header>
   <div class="min-h-screen bg-gradient-to-b from-purple-800 to-black text-white">
     <section class="container mx-auto px-6 pt-20 pb-24 text-center">
       <h2 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">

@@ -1,17 +1,19 @@
 <template>
-  <TheHeader />
+  <TheHeader v-if="!route.meta.hideLayout" />
 
   <main class="content-wrapper">
     <RouterView />
   </main>
 
-  <TheFooter />
+  <TheFooter v-if="!route.meta.hideLayout" />
 </template>
 
 <script setup>
-// Import các Component Bố cục
 import TheHeader from './layout/TheHeader.vue'
 import TheFooter from './layout/TheFooter.vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 </script>
 
 <style>
