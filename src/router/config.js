@@ -3,6 +3,7 @@ import AuthSignUp from '@/auth/AuthSignUp.vue'
 import VerifyEmail from '@/auth/VerifyEmail.vue'
 import DashboardPage from '@/dashboard/DashboardPage.vue'
 import HomePage from '@/home/HomePage.vue'
+import NotFoundPage from '@/not_found/NotFoundPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -36,6 +37,12 @@ const router = createRouter({
       name: 'dashboard',
       component: DashboardPage,
       meta: { hideLayout: true }, // Dashboard thường có layout riêng
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: NotFoundPage,
+      meta: { hideLayout: true },
     },
   ],
 })
