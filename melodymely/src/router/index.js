@@ -1,4 +1,5 @@
 import AuthLogin from '@/auth/AuthLogin.vue'
+import AuthSignUp from '@/auth/AuthSignUp.vue'
 import HomePage from '@/home/HomePage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: AuthLogin,
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: AuthSignUp,
     },
   ],
 })
