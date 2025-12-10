@@ -1,9 +1,22 @@
-<script setup></script>
-
 <template>
-  <h1>You did it!</h1>
-  <p className="text-red-500">
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <TheHeader />
+
+  <main class="content-wrapper">
+    <RouterView />
+  </main>
+
+  <TheFooter />
 </template>
+
+<script setup>
+// Import các Component Bố cục
+import TheHeader from './layout/TheHeader.vue'
+import TheFooter from './layout/TheFooter.vue'
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+</style>
