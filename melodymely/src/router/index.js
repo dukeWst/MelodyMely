@@ -1,5 +1,6 @@
 import AuthLogin from '@/auth/AuthLogin.vue'
 import AuthSignUp from '@/auth/AuthSignUp.vue'
+import VerifyEmail from '@/auth/VerifyEmail.vue'
 import HomePage from '@/home/HomePage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: AuthSignUp,
+    },
+    {
+      path: '/verify',
+      name: 'verify',
+      component: VerifyEmail,
     },
   ],
 })

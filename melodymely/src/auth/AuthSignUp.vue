@@ -2,7 +2,9 @@
   <div
     class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-800 to-black text-white"
   >
-    <div class="w-full max-w-md p-8 bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl my-10">
+    <div
+      class="w-full max-w-md p-8 bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl my-10 border border-white/5"
+    >
       <div class="text-center mb-6">
         <h2
           class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600"
@@ -12,7 +14,7 @@
         <p class="text-gray-400 text-sm mt-2">Join MelodyMely and feel the beat</p>
       </div>
 
-      <form class="space-y-4">
+      <form class="space-y-4" @submit.prevent="handleSignUp">
         <div>
           <label class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
           <div class="relative">
@@ -33,6 +35,7 @@
               </svg>
             </span>
             <input
+              v-model="form.fullName"
               type="text"
               class="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition"
               placeholder="John Doe"
@@ -60,7 +63,8 @@
               </svg>
             </span>
             <input
-              type="email"
+              v-model="form.email"
+              type="text"
               class="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition"
               placeholder="name@example.com"
             />
@@ -87,16 +91,18 @@
               </svg>
             </span>
             <input
-              type="password"
+              v-model="form.password"
+              :type="showPassword ? 'text' : 'password'"
               class="w-full pl-10 pr-12 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition"
               placeholder="Create a password"
             />
             <button
               type="button"
+              @click="showPassword = !showPassword"
               class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                v-if="!showPassword"
                 class="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -113,6 +119,14 @@
                   stroke-linejoin="round"
                   stroke-width="2"
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+              <svg v-else class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
                 />
               </svg>
             </button>
@@ -139,6 +153,7 @@
               </svg>
             </span>
             <input
+              v-model="form.confirmPassword"
               type="password"
               class="w-full pl-10 pr-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition"
               placeholder="Repeat your password"
@@ -149,22 +164,58 @@
         <div class="flex items-start mt-2">
           <div class="flex items-center h-5">
             <input
+              v-model="form.agreed"
               id="terms"
               type="checkbox"
-              class="w-4 h-4 border border-gray-600 rounded bg-gray-700 focus:ring-3 focus:ring-pink-500 text-pink-500"
+              class="w-4 h-4 border border-gray-600 rounded bg-gray-700 focus:ring-3 focus:ring-pink-500 text-pink-500 cursor-pointer"
             />
           </div>
-          <label for="terms" class="ml-2 text-sm font-medium text-gray-300">
+          <label
+            for="terms"
+            class="ml-2 text-sm font-medium text-gray-300 cursor-pointer select-none"
+          >
             I agree to the
             <a href="#" class="text-pink-400 hover:underline">Terms of Service</a> and
             <a href="#" class="text-pink-400 hover:underline">Privacy Policy</a>
           </label>
         </div>
 
-        <button
-          class="w-full py-3 mt-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-lg font-bold text-white shadow-lg hover:shadow-pink-500/30 transform hover:-translate-y-0.5 transition"
+        <div
+          v-if="errorMessage"
+          class="p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-400 text-sm text-center font-medium"
         >
-          Create Account
+          {{ errorMessage }}
+        </div>
+
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="w-full py-3 mt-4 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg text-lg font-bold text-white shadow-lg hover:shadow-pink-500/30 transform hover:-translate-y-0.5 transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+        >
+          <span v-if="isLoading" class="flex items-center">
+            <svg
+              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Processing...
+          </span>
+          <span v-else>Create Account</span>
         </button>
 
         <div class="relative flex py-2 items-center">
@@ -212,11 +263,91 @@
 </template>
 
 <script setup lang="ts">
-// Không có logic
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { supabase } from '@/supabase'
+
+const router = useRouter()
+const isLoading = ref(false)
+const errorMessage = ref('')
+const showPassword = ref(false)
+
+const form = reactive({
+  fullName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  agreed: false,
+})
+
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+const handleSignUp = async () => {
+  errorMessage.value = ''
+
+  // VALIDATION
+  if (!form.fullName) {
+    errorMessage.value = 'Full Name is required!'
+    return
+  }
+  if (!form.email) {
+    errorMessage.value = 'Email is required!'
+    return
+  }
+  if (!isValidEmail(form.email)) {
+    errorMessage.value = 'Invalid email format!'
+    return
+  }
+  if (!form.password) {
+    errorMessage.value = 'Password is required!'
+    return
+  }
+  if (form.password.length < 6) {
+    errorMessage.value = 'Password must be at least 6 characters!'
+    return
+  }
+  if (form.password !== form.confirmPassword) {
+    errorMessage.value = 'Confirm Password does not match!'
+    return
+  }
+  if (!form.agreed) {
+    errorMessage.value = 'Please agree to the Terms of Service!'
+    return
+  }
+
+  // SUPABASE CALL
+  try {
+    isLoading.value = true
+    const { data, error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: {
+          full_name: form.fullName,
+          avatar_url: '',
+        },
+      },
+    })
+
+    if (error) throw error
+
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      errorMessage.value = 'Email already exists. Please log in.'
+    } else {
+      // CHUYỂN HƯỚNG TRUYỀN EMAIL
+      router.push({ path: '/verify', query: { email: form.email } })
+    }
+  } catch (error: any) {
+    errorMessage.value = error.message
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <style scoped>
-/* Autofill fix */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
