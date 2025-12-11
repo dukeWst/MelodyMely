@@ -13,65 +13,57 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomePage,
+      // [NEW] Thêm cờ showLoader
+      meta: { showLoader: true },
     },
     {
       path: '/login',
       name: 'login',
       component: AuthLogin,
-      meta: { hideLayout: true },
+      meta: { hideLayout: true, showLoader: false },
     },
     {
       path: '/signup',
       name: 'signup',
       component: AuthSignUp,
-      meta: { hideLayout: true },
+      meta: { hideLayout: true, showLoader: false },
     },
     {
       path: '/verify',
       name: 'verify',
       component: VerifyEmail,
-      meta: { hideLayout: true },
+      meta: { hideLayout: true, showLoader: true },
     },
     {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardPage,
-      meta: { hideLayout: true }, // Dashboard thường có layout riêng
+      meta: { hideLayout: true, showLoader: true },
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundPage,
-      meta: { hideLayout: true },
+      // [NEW] Không có showLoader (hoặc false)
+      meta: { hideLayout: true, showLoader: false },
     },
   ],
 })
 
-// --- THÊM PHẦN NÀY ---
 router.beforeEach((to, from, next) => {
-  // 1. Kiểm tra trạng thái đăng nhập
-  // (Ví dụ: kiểm tra xem có token trong localStorage không)
-  const isAuthenticated = localStorage.getItem('access_token') // Thay bằng logic auth thực tế của bạn
-
-  // Danh sách các trang mà người dùng đã đăng nhập không nên vào lại (Home, Login, Signup)
+  const isAuthenticated = localStorage.getItem('access_token')
   const guestPages = ['home', 'login', 'signup', 'verify']
 
   if (isAuthenticated) {
-    // KỊCH BẢN 1: Đã đăng nhập
     if (guestPages.includes(to.name)) {
-      // Nếu cố vào Home/Login/Signup -> Chuyển hướng sang Dashboard
       next({ name: 'dashboard' })
     } else {
-      // Nếu vào các trang khác (ví dụ Dashboard) -> Cho phép
       next()
     }
   } else {
-    // KỊCH BẢN 2: Chưa đăng nhập
     if (to.name === 'dashboard') {
-      // Nếu cố vào Dashboard mà chưa đăng nhập -> Đẩy về Login
       next({ name: 'login' })
     } else {
-      // Cho phép vào Home, Login, Signup...
       next()
     }
   }
